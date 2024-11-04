@@ -1,3 +1,6 @@
+import React from "react";
+import ReactDOM from "react-dom";
+
 const h1 = React.createElement("h1",{id:"heading", xyz:"abc"},"hello world inside react")
     //with the above command we have created a h1 element with content written inside it. Since creating an element is a function of core react we've used React 
     //3d argument is the "children" or basically what should come inside the h1 element 
@@ -39,3 +42,4 @@ const parent = React.createElement("div",{id:"parent"},
 console.log(parent);
 
 root.render(parent)
+//this statement can render only 1 div so the above statement gets overwritten 
