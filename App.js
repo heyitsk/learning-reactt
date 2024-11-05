@@ -1,5 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
+
 
 const h1 = React.createElement("h1",{id:"heading", xyz:"abc"},"hello world inside react")
     //with the above command we have created a h1 element with content written inside it. Since creating an element is a function of core react we've used React 
@@ -41,5 +42,32 @@ const parent = React.createElement("div",{id:"parent"},
 )
 console.log(parent);
 
-root.render(parent)
+const imageUrl = "https://imgd.aeplcdn.com/300x225/cw/ucp/stockApiImg/KU5VD3C_sybhpxwl_1_48559254.jpg?q=80";
+
+//this makes the code complicated so to simplify it JSX was used. JSX is not a part of react it is just used to make react code look easy. JSX is not HTML inside javascript it is a "HTML/XML  like syntax". 
+//attribute in JSX are written in camelCase 
+const JSXheading = <h1 id="heading">Hello react using JSX</h1>
+// console.log(JSXheading);
+const JSXdiv = (<div id="parent">
+    <div id="child" className="headingcontainer">
+        <h1>i am a h1 tag</h1>
+        <h2>i am a h2 tag</h2>
+    </div>
+    <div id="child2" className="headingcontainer">
+        <h1>i am a h1 tag</h1>
+        <h2>i am a h2 tag</h2>
+    </div>
+    <div id="image">
+        <img src="https://imgd.aeplcdn.com/300x225/cw/ucp/stockApiImg/KU5VD3C_sybhpxwl_1_48559254.jpg?q=80" alt="asdas" />
+        <img src={imageUrl} alt="asdas" />
+    </div>
+</div>)
+console.log(JSXdiv);
+
+
+
+
+// root.render(parent)
 //this statement can render only 1 div so the above statement gets overwritten 
+// root.render(JSXheading)
+root.render(JSXdiv)
