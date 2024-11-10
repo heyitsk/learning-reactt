@@ -8,7 +8,7 @@ const RestCard = (props) => {
     const {resInfo} = props;
     console.log(resInfo);
     
-    const {name, locality, costForTwo, cloudinaryImageId} = resInfo?.info
+    const {name, locality, costForTwo, cloudinaryImageId, avgRating} = resInfo?.info
     
     return(
         <div id="rest-card">
@@ -24,6 +24,7 @@ const RestCard = (props) => {
                 <h4>{name}</h4>
                 <h5>{locality}</h5>
                 <h6>{costForTwo}</h6>
+                <h6>{avgRating}</h6>
             </div>
         </div>
     )

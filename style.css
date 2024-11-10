@@ -77,3 +77,10 @@
     justify-content: center;
     gap: 20px;
 }
+#filterbtn-container{
+    margin: 10px;
+}
+#filter-btn{
+    padding: 5px;
+    cursor: pointer;
+}
