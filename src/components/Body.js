@@ -1,54 +1,76 @@
 import RestCard from "./RestCard";
 import resList from "../utils/demodata";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Shimmer from "./Shimmer";
 
 const Body = () => {
 
-    const [restaurantList, setrestaurantlist] = useState(resList)
+    const [restaurantList, setrestaurantlist] = useState([])
     //if you want to update the restaurantList u use the setrestaurantlist method 
 
     //this is a normal js variable 
-    let restaurantList2 = [
-        {
-            "info": {
-          "id": "630193",
-          "name": "Dominos",
-          "cloudinaryImageId": "xph0vf5pvbxjf8xchwjk",
-          "locality": "Sinchai Colony",
-          "costForTwo": "₹200 for two",
-          "cuisines": [
-            "North Indian"
-          ],
-          "avgRating": 3.3,
-         }
-        },
-         {
-         "info": {
-          "id": "630194",
-          "name": "KFc",
-          "cloudinaryImageId": "xph0vf5pvbxjf8xchwjk",
-          "locality": "Sinchai Colony",
-          "costForTwo": "₹200 for two",
-          "cuisines": [
-            "North Indian"
-          ],
-          "avgRating": 4.3,
-        }
-        },
-        {
-            "info": {
-          "id": "630195",
-          "name": "Burger King",
-          "cloudinaryImageId": "xph0vf5pvbxjf8xchwjk",
-          "locality": "Sinchai Colony",
-          "costForTwo": "₹200 for two",
-          "cuisines": [
-            "North Indian"
-          ],
-          "avgRating": 4.5,
-        }
-        }
-]
+//     let restaurantList2 = [
+//         {
+//             "info": {
+//           "id": "630193",
+//           "name": "Dominos",
+//           "cloudinaryImageId": "xph0vf5pvbxjf8xchwjk",
+//           "locality": "Sinchai Colony",
+//           "costForTwo": "₹200 for two",
+//           "cuisines": [
+//             "North Indian"
+//           ],
+//           "avgRating": 3.3,
+//          }
+//         },
+//          {
+//          "info": {
+//           "id": "630194",
+//           "name": "KFc",
+//           "cloudinaryImageId": "xph0vf5pvbxjf8xchwjk",
+//           "locality": "Sinchai Colony",
+//           "costForTwo": "₹200 for two",
+//           "cuisines": [
+//             "North Indian"
+//           ],
+//           "avgRating": 4.3,
+//         }
+//         },
+//         {
+//             "info": {
+//           "id": "630195",
+//           "name": "Burger King",
+//           "cloudinaryImageId": "xph0vf5pvbxjf8xchwjk",
+//           "locality": "Sinchai Colony",
+//           "costForTwo": "₹200 for two",
+//           "cuisines": [
+//             "North Indian"
+//           ],
+//           "avgRating": 4.5,
+//         }
+//         }
+// ]
+    
+    useEffect(()=>{
+      // console.log("use effect called");
+      fetchData();
+      
+    },[])
+    const fetchData =async ()=>{
+      const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.99740&lng=79.00110&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
+    
+
+    const json = await data.json();
+    console.log(json);
+    console.log(json.data.cards[2].card.card.gridElements.infoWithStyle.restaurants);
+    setrestaurantlist(json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+    }
+    
+
+    //this is called conditional rendering
+    if (restaurantList.length===0){
+        return <Shimmer/>
+    }
 
  //STATE variable -> super powerful variable -> for that we use hooks and we use a hook called "useState"
     return(
