@@ -58,14 +58,14 @@ const Body = () => {
       fetchData();
       
     },[])
-    console.log("body rendered"); //this will print twice once when the body is intially rendered with skimmer ui and the second when the API loads and real data get reredned
+    // console.log("body rendered"); //this will print twice once when the body is intially rendered with skimmer ui and the second when the API loads and real data get reredned
     
     const fetchData =async ()=>{
-      const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.99740&lng=79.00110&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
+      const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.6691565&lng=77.45375779999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
     
 
     const json = await data.json();
-    console.log(json);
+    // console.log(json);
     // console.log(json.data.cards[2].card.card.gridElements.infoWithStyle.restaurants);
     setrestaurantlist(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
     setfilteredlist(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)

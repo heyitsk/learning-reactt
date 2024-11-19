@@ -1,4 +1,6 @@
 const Footer = ()=> {
+    // console.log("footer renders");
+    
     return(
         <div id="footer-container">
             <ul>
