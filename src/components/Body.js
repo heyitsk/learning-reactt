@@ -6,6 +6,8 @@ import Shimmer from "./Shimmer";
 const Body = () => {
 
     const [restaurantList, setrestaurantlist] = useState([])
+    const [filteredList, setfilteredlist] = useState([])
+
     //if you want to update the restaurantList u use the setrestaurantlist method 
 
     //this is a normal js variable 
@@ -50,20 +52,24 @@ const Body = () => {
 //         }
 //         }
 // ]
-    
-    useEffect(()=>{
+    const [searchText, setsearchText] = useState("")
+    useEffect(()=>{      
       // console.log("use effect called");
       fetchData();
       
     },[])
+    console.log("body rendered"); //this will print twice once when the body is intially rendered with skimmer ui and the second when the API loads and real data get reredned
+    
     const fetchData =async ()=>{
       const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.99740&lng=79.00110&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
     
 
     const json = await data.json();
     console.log(json);
-    console.log(json.data.cards[2].card.card.gridElements.infoWithStyle.restaurants);
-    setrestaurantlist(json?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+    // console.log(json.data.cards[2].card.card.gridElements.infoWithStyle.restaurants);
+    setrestaurantlist(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+    setfilteredlist(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+
     }
     
 
@@ -76,9 +82,26 @@ const Body = () => {
     return(
         <div id="body-container">
             <div id="search-container">
-                <input type="text" placeholder="Search.."></input>
+                <input type="text" placeholder="Search.." 
+                value={searchText}
+                onChange={(e)=>{
+                    setsearchText(e.target.value)
+                }}></input>
                 <button id="search-button" 
                 style={{backgroundColor: "gray", border: "none", borderRadius: "5px", padding: "5px"}}
+                onClick={()=>{
+                    // console.log({searchText});
+                    
+                    
+                    const filterres = filteredList.filter((res)=>
+                    res.info.name.toLowerCase().includes(searchText.toLowerCase())
+                )
+
+                    
+
+                    
+                    setrestaurantlist(filterres)
+                }}
                 >Search</button>
             </div>
             <div id="filterbtn-container">
@@ -86,8 +109,8 @@ const Body = () => {
                     // restaurantList=restaurantList.filter(restaurant => restaurant.info.avgRating>4)
                     //this logic filters the restaurant list acc to the logic and updates the restaurant list. But even when the restaurant list is updated the UI doesn't change bcz restaurant list is normal js variable. solution->
 
-                    filteredList=restaurantList.filter(restaurant => restaurant.info.avgRating>4)
-                    setrestaurantlist(filteredList);
+                    fltrlist=filteredList.filter(restaurant => restaurant.info.avgRating>4)
+                    setrestaurantlist(fltrlist);
                     //here we save the edited list in filtered list and pass the filtered list in the setrestaurantlist function which updates the UI 
 
                     
