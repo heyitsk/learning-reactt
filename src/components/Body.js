@@ -2,6 +2,7 @@ import RestCard from "./RestCard";
 import resList from "../utils/demodata";
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
+import { Link } from "react-router-dom";
 
 const Body = () => {
 
@@ -122,7 +123,11 @@ const Body = () => {
                 {/* <RestCard resname="kfc" reslocation="delhi"/> this is also a lengthy process as we will get data through backend and we can't write these values ourselves*/}
                 {/* <RestCard resInfo = {resList[0]}/> it is better to use a loop */}
                 {
-                  restaurantList.map(restaurant => <RestCard key={restaurant.info.id} resInfo={restaurant}/>) 
+                  restaurantList.map((restaurant) =>
+                     (<Link to={"/restaurants/"+restaurant.info.id} 
+                        key={restaurant.info.id}>
+                            <RestCard  resInfo={restaurant}/>
+                    </Link>)) 
                   //NOTE :- whenever you use map function  make sure to use unique key for each
                 }
                 {/* <RestCard resname="dominos" reslocation="punjab"/>  */}
