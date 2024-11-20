@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Error from "./components/Error";
+import Menu from "./components/Menu";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 
@@ -36,6 +37,10 @@ const appRouter = createBrowserRouter([
             {
                 path:"/contact",
                 element:<Contact/>
+            },
+            {
+                path:"/restaurants/:resid", //the semicolon means that the resid is dynamic and can be used for dynamic routing. You will read this resid using another hook provided by router dom called useParams
+                element:<Menu/>
             }
         ],
         errorElement:<Error/> // this will render if the path is not correct 
