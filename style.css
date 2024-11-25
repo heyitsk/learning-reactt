@@ -100,3 +100,8 @@
     align-items: center;
     background-color: grey;
 }
+
+.user-card{
+    padding: 10px;
+    border: 2px solid black;
+}
