@@ -1,6 +1,7 @@
 //this is a class based component which is a normal js class 
 
 import { count } from "console";
+import { userInfo } from "os";
 import React from "react";
 class UserClass extends React.Component{
     constructor(props){
@@ -9,32 +10,52 @@ class UserClass extends React.Component{
 
         this.state={
             count:0,
-            count2:2
+            count2:2,
+            userinfo:{
+                name:"kush",
+                location:"dummy"
+            }
         }
-        console.log("child constructor");
+        // console.log(this.props.name+"child constructor");
         
         
     }
-    componentDidMount(){
-        console.log("child component mount");
+    async componentDidMount(){
+        // console.log(this.props.name+"child component mount");
+        const response = await fetch("https://api.github.com/users/heyitsk")
+        const json = await response.json()
+        // console.log(json);
+        this.setState({
+            userinfo:json
+        })
         
+    }
+    componentDidUpdate(){
+        console.log("component updated");
+        
+    }
+    componentWillUnmount(){
+        console.log("component unmounted");
+        //this will run when we unmount or remove the component from the ui basically when we move on to another page
     }
     render(){
-    const {name,location} = this.props;
+    const {name,location,id,avatar_url} = this.state.userinfo;
     const {count, count2} = this.state;
-    console.log("child render");
+    
+    // console.log(this.props.name+"child render");
     
 
         return(
             <div className="user-card">
+                <img src={avatar_url}></img>
                 <h3>Name: {name}</h3>
-                <h4>Location :  {location}</h4>
-                <button onClick={()=>{
+                <h4>Id :  {id}</h4>
+                {/* <button onClick={()=>{
                     this.setState({
                         count : count+1
                     })
-                }}>count increase</button>
-                <h5>Count : {count}</h5>
+                }}>count increase</button> */}
+                {/* <h5>Count : {count}</h5> */}
                 {/* <h5>Count : {count2}</h5> */}
                 <h5>Contact : asdadas@asdas</h5>
             </div>
