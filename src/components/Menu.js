@@ -1,23 +1,13 @@
-import { useEffect, useState } from "react";
-import { MENU_URL } from "../utils/contants"
+import useMenuData from "../utils/useMenuData";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
 const Menu = () => {
-    const [menuData, setmenuData] = useState(null);
-    useEffect(()=>{
-        getdata()
-    },[])
+    
     const {resid} = useParams();
     // console.log(params);//this contains the object which contains the resid 
     
-
-    const getdata = async function (){
-        const data = await fetch(MENU_URL+resid)
-        const jsonData = await data.json()
-        console.log(jsonData);
-        setmenuData(jsonData.data)
-        // console.log(menuData);
-    }
+    const menuData = useMenuData(resid);
+    
     if(menuData===null) return <Shimmer/>; //if we use this below the const{name,city...} then it will print error bcz menuData is null and you are trying to traverse it.
     //what this does it it lets the api fetch the data until then shimmer will load and after the data loads the traversing will occur 
 
