@@ -7,7 +7,10 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 import Error from "./components/Error";
 import Menu from "./components/Menu";
+// import Shimmer from "./components/Shimmer";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+// import Grocery from "./components/Grocery";
+import { lazy, Suspense } from "react";
 
 
 const FoodApp = () => {
@@ -20,7 +23,7 @@ const FoodApp = () => {
     </div>
     )
 }
-
+const Grocery = lazy(()=>import("./components/Grocery"))
 const appRouter = createBrowserRouter([
     {
         path:"/",
@@ -37,6 +40,10 @@ const appRouter = createBrowserRouter([
             {
                 path:"/contact",
                 element:<Contact/>
+            },
+            {
+                path:"/grocery",
+                element:<Suspense fallback={<h1>hello</h1>}><Grocery/></Suspense>
             },
             {
                 path:"/restaurants/:resid", //the semicolon means that the resid is dynamic and can be used for dynamic routing. You will read this resid using another hook provided by router dom called useParams
