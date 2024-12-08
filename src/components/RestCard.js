@@ -11,9 +11,9 @@ const RestCard = (props) => {
     const {name, locality, costForTwo, cloudinaryImageId, avgRating} = resInfo?.info
     
     return(
-        <div id="rest-card">
-            <div id="restimg-container">
-                <img src=
+        <div className="rest-card border-4 border-black-500 p-3 flex flex-col ">
+            <div className="restimg-container">
+                <img className="img h-60 w-full"src=
                 {CDN_URL+cloudinaryImageId
                 }/>
             </div>

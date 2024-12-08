@@ -87,15 +87,15 @@ const Body = () => {
 
  //STATE variable -> super powerful variable -> for that we use hooks and we use a hook called "useState"
     return(
-        <div id="body-container">
-            <div id="search-container">
-                <input type="text" placeholder="Search.." 
+        <div className="m-4">
+            <div className="search-container">
+                <input className="border-2 border-black-500 rounded-md p-2 shadow-sm" type="text" placeholder="Search.." 
                 value={searchText}
                 onChange={(e)=>{
                     setsearchText(e.target.value)
                 }}></input>
-                <button id="search-button" 
-                style={{backgroundColor: "gray", border: "none", borderRadius: "5px", padding: "5px"}}
+                <button className="search-button bg-slate-700 text-white p-2 mx-2 rounded-sm" 
+                
                 onClick={()=>{
                     // console.log({searchText});
                     
@@ -112,7 +112,7 @@ const Body = () => {
                 >Search</button>
             </div>
             <div id="filterbtn-container">
-                <button id="filter-btn" onClick={()=> {
+                <button className="filter-btn bg-slate-700 text-white p-2  rounded-sm my-2 " onClick={()=> {
                     // restaurantList=restaurantList.filter(restaurant => restaurant.info.avgRating>4)
                     //this logic filters the restaurant list acc to the logic and updates the restaurant list. But even when the restaurant list is updated the UI doesn't change bcz restaurant list is normal js variable. solution->
 
@@ -125,7 +125,7 @@ const Body = () => {
                     Top Rated Restaurant
                 </button>
             </div>
-            <div id="restcard-container">
+            <div className="restcard-container grid grid-cols-5 gap-7">
                 {/* <RestCard resname="kfc" reslocation="delhi"/> this is also a lengthy process as we will get data through backend and we can't write these values ourselves*/}
                 {/* <RestCard resInfo = {resList[0]}/> it is better to use a loop */}
                 {
