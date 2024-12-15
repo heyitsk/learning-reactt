@@ -1,0 +1,494 @@
+we have bundelers -> webpack , parcel , vite etc and what they do is they bundel the entire code and make it ready to push it into production 
+dependencies are what our project is dependent on for  working 
+there are two type of dependencies which we can install - > normal dependency , dev dependency
+dev dependency -> required in development  (npm install -D parcel )
+normal dependency -> used in production also 
+
+
+
+
+
+the difference btw package.json and package-lock.json is->
+package.json-> it specifies the dependencies you need but not the exact version 
+               it puts like a react: ^17.0.0 which means that it's compatible with version 17 of react. when u or someone installs the project it will fetch newer closer version like 17.1.1
+package-lock.json-> it notes the exact version of dependencies when they were installed
+               let's say when you downloaded the version was react: 17.0.0. So now when you or someone else installs the project it will fetch this exact version 17.0.0 so that your app behaves consitently irrespective of the newer versions
+NOTE :- it is important to put both of these files on github as they have the required dependencies and their versions which are important for our project. And since these files will be on github we just have to do "npm install" to regenerate the entire node_modules folder
+
+
+
+
+
+
+transitive dependencies -> we have parcel as a dev dependency for our project now parcel will have its own dependencies which will have their own dependencies and it goes on that's why whenn we do npm install parcel so many things get inside the node_modules folder and each dependencies will have their own package.json and package-lock.json
+
+
+
+
+
+we removed the cdn links from the index.html since it is not a good paractice and we installed react and react-dom in the node modules using npm install react and npm install react-dom. 
+Now the app.js file was using react and react-dom bcz it was in the index.html file now we need to import it from the node modules so we do   * import React from "react";   import ReactDOM from "react-dom"; *
+
+
+
+
+
+
+as soon as we ignite the app and change anything and save it, it quickly shows the change on the page. How? 
+Parcel keeps a watch on all the files using File watching algorithm (which is written in C++) and perfroms something called as "HMR or HOT MODULE REPLACEMENT"
+Parcel also cache all our files making the build faster since it has cache of our files with the subsequent builds we don't have to reprocess these files from scratch 
+
+
+
+
+
+
+
+"broweserslist":[
+    "last 2 version"
+  ]
+what this does is it makes sure that our app run definitly on last 2 versions of all apps which u can check on browserslist.dev but it makes the code slower as it attaches different dependencies of different broswers
+
+
+
+
+
+if you go to a new company and don't know how to start the app go to package.json -> scripts -> you'll find commands like start, build etc and then simply do "npm run script_name"
+
+
+
+BABBLE IS A TRANSPILER
+React.createElement => creates react element (object) => html element by .render
+however the JSX is NOT a valid javascript syntax, JS engine and browser cannot understand it. So how does that work?
+The jsx code => transpiled into React.createElement by BABLE => into react code that browser and js engine understands
+JSX code => React.createElement => creates react element (object) => html element by .render
+
+
+
+
+
+you can write js inside jsx by using {} anything inside these brackets will run as normal js code 
+
+
+
+
+const RestCard = (props) => {
+    
+    return(
+        ...
+                <h4>{props.resname}</h4>
+                <h5>{props.reslocation}</h5>
+        ...
+    )
+}
+instead of this some developers "destructure it on the fly" ->
+const RestCard = ({resname, reslocation}) => {
+    
+    return(
+        ...
+                <h4>{resname}</h4>
+                <h5>{reslocation}</h5>
+        ...
+    )
+}
+or
+const RestCard = (props) => {
+    const {resname, reslocation} = props
+    return(
+        ...
+                <h4>{resname}</h4>
+                <h5>{reslocation}</h5>
+        ...
+    )
+}
+
+
+
+
+
+
+
+const RestCard = (props) => {
+    const {resInfo} = props;
+     const {name, locality, costForTwo, cloudinaryImageId} = resInfo?.info
+    
+    return(
+        <div id="rest-card">
+           ..
+            <div id="rest-info">
+                <h4>{name}</h4>
+                <h5>{locality}</h5>
+                <h6>{costForTwo}</h6>
+            </div>
+        </div>
+    )
+}
+const Body = () => {
+    return(
+        ...
+            <div id="restcard-container">
+                {
+                  resList.map(restaurant => <RestCard resInfo={restaurant}/>)
+                }
+        </div>
+    )
+}
+basically what have we done is resList contained multiple objects and har object ko hamne restaurant bola and each restaurantobject got stored in the resInfo. Props wrapped the resInfo in a object{ resInfo:{}}.
+So now we'll destructure it hamne props object me se resInfo nikala stored it and fir hamne resInfo.info me se baaki var nikale and stored them 
+
+
+
+
+
+"config driven ui" -> is a UI which is driven by configs. Like for example you want to show some offers in delhi and some different offers in mumbai how would u do that in the same website. You'll make your UI config driven which means that the configs provided by the backend will change the ui of the website respectively 
+
+
+
+
+when we use resuable components like restcard we use unique key bcz lets say we don't have unique keys for existing cards and now we need to enter a new RestCard at beginning, react will clean the entire container and "re-render" all the RestCards.
+If we have unique keys for existing RestCards then react will know that they were existing and the react will only render 1 one card and not all 
+You can also use index(i) as the key 
+resList.map((restaurant, index) => <RestCard key={index} resInfo={restaurant}/>)
+BUT THIS IS NOT RECOMMENDED
+Let me explain, a key is the only thing React uses to identify DOM elements. What happens if you push an item to the list or remove something in the middle? If the key is same as before React assumes that the DOM element represents the same component as before. But that is no longer true.
+
+
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+NOW WE'RE STRUCTURING OUR CODE->
+-All js file (app) inside src 
+--All components in components folder. Name of all component file start from caps and exact same as component name
+--all images and data in utilities folder
+
+
+
+
+
+
+two types of import and export
+default -> when u want to export only 1 component 
+export default compname
+import compname from "path"
+
+
+named-> when u want to export multiple components 
+export const compname
+import {compname} from "path"
+
+
+
+
+
+Earlier functional component didn't have access to state management and lifecycle method so we used class components
+HOOKS allowed us to do it, they make functional component behave like class component 
+
+react hooks are normal js functions given to us by react and it comes with superpowers. They were written by facebook developers and they are written inside React which we've imported by npm install react
+(anything that starts with "use" is a hook) 
+Two most important hooks
+-UseState() -> helps to create super powerful js  variable. Whenever a state variable updates react re-renders the component 
+               You import it from "react" using *named import*-> import {useState} from "react"
+               what this does is it returns the state variable and we store it in an array 
+               const [arr] = useState()
+               we pass an array inside useState if not passed it'll take nothing it's like declaring a normal js variable an empty array let arr = [];
+               const [arr] = useState([x]) x becomes the default value of arr
+               const [arr, setarr] = useState([x]). The second parameter is the setarr function which helps to  change the UI when list changes and we pass the filtered list in setarr(filtered list) to change the UI 
+                WHEN WE CHANGE THE NORMAL JS VARIABLE THE UI DOESN'T UPDATE. SO TO BIND THE CHANGES WITH THE UI WE USE UseState AS IT CHANGES THE STATE OF A VARIABLE AS SOON AS SOME EVENT IS DONE AND THEN REACT RECOGNIZES THAT VARIABLE AND CHANGES IT ON THE UI AS WELL
+                defN - > whenever state variable updates , react triggers a reconcilation cycle or rerenders the components and update the UI 
+                TIP:- always write this inside the component at the top where the function starts
+                        never use it inside if else, for, functions
+-UseEffect() -> this will be called everytime my component renders
+                two arguments, 1- callback function    2- dependency array
+                ALWAYS CALLED ONCE AFTER INTIAL RENDER 
+                if you pass without dependency array the UseEffect calls each time the component renders 
+                if you pass [] empty dependency array it will be called only "once" on the initial render
+                if you pass [x], it will be called everytime x is updated
+                This is used for perferoming an async task like fetching data from api, serinterval, settimeout 
+
+
+
+
+WHY DO WE USE HOOKS?
+-earlier the js had two components the functional and the class. The functional components didn't have access to react life cycle and couldn't manage their own state while class components were able to do that. So we had to use both components in our code which makes it difficult and moreover we had to access state vars using this.var etc. 
+Hooks fixed this shortcoming of functional component, now we can use hooks to make functional component access react life cycle
+
+
+ const [restaurantList, setrestaurantlist] = useState(resList)
+ or 
+ const arr = useState(resList)
+ [restaurantList, setrestaurantlist] = arr
+ or 
+ const arr = useState(resList)
+ restaurantList= arr[0]
+ setrestaurantlist = arr[1]
+
+
+
+
+
+Why is react fast?
+    Bcz it does efficient DOM manupulation
+How?
+    Using virtual dom which is a represntation of actual dom (all html tags etc). virtual dom is an "object" represntation of the actual dom
+So why does this make it fast?
+    In React 16 react fibre was introduced  which follows reconcilation algorithm basically a diff algorithm which compares the old virtual dom to the new virtual dom and if it finds a difference it updates that difference. In our example of rest cards as soon as the state changes when we **call the setrestaurantlist** the react runs the algorithm finds out the difference btw virtual doms and re-renders the UI 
+
+
+
+
+
+there are two approaches to render a page 
+-1st -> the page loads --- the Api loads (takes 500ms) --> after 500ms the entire page rerenders 
+-2nd -> the page loads --- the UI renders(like skeleton) --- Api loads --> after 500ms the entire page rerenders with the UI. The ensures better UX
+In react we always use the 2nd approach 
+
+
+
+
+we import the UseEffect just like useState using named import
+UseEffect will have 2 parameters, 1st the arrow func 2nd the dependency array 
+This will run after the entire body renders 
+
+
+
+
+
+now even after using UseEffect the body gets rendered quickly but is blank this makes the UI look poor 
+to improve it -> we use shimmer ui -> the page loads fake cards until the data is fetched from api
+so the 2nd approach that we talked about ----
+load the page -- render the shimmer UI -- api loads -- rerender it with real data
+(even though it renders twice react has fast render cycles)
+
+
+
+
+
+
+if (restaurantList.length===0){
+        return <Shimmer/>
+    }
+or 
+return restaurantList.length===0 ? (<Shimmer/>) : (div ......)
+
+
+
+
+
+
+
+
+ <button onClick={()=>{setbuttonState ("logout")}}>{buttonState}</button>
+ When you click on this the header is rendered again with the new change and it happenss so quickly
+ ----A good question const [buttonState, setbuttonState]= useState(["login"]); since it is a const variable how are you changing its value to logout 
+ See when the button is clicked the whole header component is rendered again which means that the header function is called again. And this the time varible will have the value as logout 
+
+
+
+
+
+
+
+ <input type="text" placeholder="Search.." 
+                value={searchText}
+                onChange={(e)=>{
+                    setsearchText(e.target.value)
+                }}></input>
+to get the text that user is typing in this input field we need to "bind" it to a local statevariable having value "" int hebeginning.
+When the user writes something and the text changes the input field is still bind to the searchText which has an empty string so to accept the change and show it we use onChange and update the searchText using setsearchText
+
+NOTE:- WE  did the console.log("body rendered") and we see that it gets logged each time a letter is typed this means each time user writes a letter the searchText updates and the input field updates so each time the body component is rendered EVEN WITH THE BACKSPACE IF WE'RE REMOVING A LETTER 
+
+
+
+
+
+
+
+
+the issue that we are facing it if we've searched something and that res cards get rendered and now we search another restaurant it won't search bcz now the reslist contains the filtered list and it does not have all the restaurants which reslist had in the beginning. So we must make another state variable for the filtered list
+
+
+
+
+
+
+
+
+when we did header render, body render and footer render inside their own component. when the page loads we see something interesting 
+-header rendered
+-body rendered
+-footer rendered
+-body rendered (again bcz now the data was fetched from API )
+
+
+
+
+
+
+
+lets create the about us page ---- we will do it using routing which is done on the FoodApp file
+we import createBrowserRouter and we are creating browsing configuration inside app router
+createBrowserRouter([{path:"", element:</>},{}]) it takes an array of object each object consist of a path and a component which will be rendered on the path
+NOW you've "CREATED" the router config, you need to provide it else it will not show 
+for that we use another function called RouterProvider
+it also has useRouteError which helps to deal with errors efficiently 
+
+
+
+
+
+
+<li><Link to="/contact">Contact</Link></li> 
+when we use this instead of our anchor tag our whole page does not get refreshed 
+So when u click on the about link the header remains intact and the entire outlet gets replaced by about component you can see it in the HTML as well 
+<a> ------> reloads the entire page 
+<link to> ------> refreshes the components
+Note:- under the hood link uses anchor tag if you look at it in the browser dev and react router dom keep a track of it 
+
+
+
+
+
+
+
+2 types of ROUTING
+-client side routing -> when u load the app for the first time it already has code for all the pages, about, contact etc so, 
+                        when clicked upon it quickly changes the components 
+                        No network calls are made after the API call to fetch card data
+                        This is why it is a single page application 
+-server side routing -> when u click on the about the request gets sent to the server and the server sends back the about page.
+                        It makes network calls
+
+
+
+
+
+
+
+
+useEffect(async()=> {
+        const api = await fetch(MENU_URL)
+        const data = await api.json();
+        console.log(data);
+        
+    },[])
+what i did here is wrong as it showed a warning that "useEffect must not return anything except a function"
+
+
+
+
+
+
+
+
+
+
+
+const response = await axios.get("url")
+this provides an object containing our api data, headers, request etc
+response.data gives the object containing articles
+response.data.articles gives us the req array 
+
+
+
+
+import React from "react";
+class About extends React.Component{}
+or 
+import {Component} from "react";
+class About extends Component{}
+
+
+about is a functional compoennt and inside it Userclass is a class based component now when react loads and comes across the class based components, "an instance of class component is created"
+-now when the instance is created first of all the constructor function will be called and then render will be called
+
+
+ 
+ 
+ 
+ 
+what if we male parent component (about) as a class based compoennt as well 
+-parent contructor -> parent render -> child constructor -> child render 
+
+
+
+now we use another method called "componentDidMount" this loads when react updates the DOM 
+parent constructor -> parent render -> while rendereing it indentifies a child class component so the life cycle of child component is initiated -> child constructor -> child render -> since the child component is rendered the child component mount will be called -> this finishes the parent render cycle now the parent component mount will run 
+
+
+
+
+we use componentDidMount to make "api calls" bcz of the behaviour that it will be called after component is rendered
+see we studied that there are 2 methods to make api calls and we want the second where 
+page loads-> body renders -> api calls -> body rerendered with the data fetched from api 
+that's why this componentDidMount is used to call api as it will run after body rendersx   
+
+
+
+the output -> 
+parent constructor 
+parent render 
+1stchild constructor
+1stchild render 
+2ndchild constructor 
+2ndchild render 
+1stchild component mount 
+2ndchild component mount
+parent component mount
+whis occurs because of the react life cycle which consist of 2 phases -render phase -commit phase and it happens for each component
+-render phase 
+    - constructor called
+    - render called
+- commit phase 
+    - changes to DOM
+    - componentDidMount
+
+But why did 1stchild component mount 2ndchild component mount they got printed later??
+- React did this to optimize the code it will batch the render phase of these two children and then their commit phase will happen
+--But why does it happen like this 
+--- This happens bcz render phase is very fast and commit phase takes it as it contains dom manupulation which is the most expensive task so it first completed the rendering of toh children and then commit them 
+
+
+
+
+
+
+
+
+
+to understand react life cycle https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+
+
+
+
+
+
+
+if you go to network -> js you'll see there's just 1 single js file which contains all the code that parcel bundeled into single js file 
+if we're making a big app and all the code comes inside this then it's size will increase and will take more time to load so we distribute it 
+ex :- swiggy has swiggyinstamart which is in itself a big file so we can't put them in 1 single file. When we click on the instamart only then we want the code to load
+This is called 
+-Chunking
+-Code splitting
+-Dynamic bundling 
+-lazy loading
+-on demand loading
+
+
+
+
+we made a grocery component and imported it normally 
+NOW to do it by lazy loading we will use 
+import { lazy } from "react";
+lazy is a function given by react which takes a callback function and where we use import. This import is different from normal import as it is a function and it takes the path of the grocery component 
+const Grocery = lazy(()=>import("./components/Grocery"))
+BUT IT STILL DOESN'T LOAD WHEN CLICKED UPON
+-- this happens bcz grocery is clicked it takes some time to load it and in that time react wants to show something so we use a component called "Suspense", we can wrap the grocery component inside it and it also takes a fallback which is basically what to show when screen is loading 
+
+
+
+
+You said:
+lemme explain it according to my understanding and check if i'm correct or not. when we map the restaurant list and link it to the restaurant.info.id the url is lets suppose restaurant/655882 so the path for a certain menu becomes restaurant/655882 and when this menu component opens it uses the useparams and extracts the resid from the url which is 655882 and then according to logic append in the api 
