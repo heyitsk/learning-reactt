@@ -30,4 +30,19 @@ const RestCard = (props) => {
     )
 }
 
+ export const withOpenLabel = (RestCard)=>{
+    return(props)=>{
+        return(
+            <div>
+                <label className="bg-black text-white rounded-md p-2 absolute">Is Open</label>
+                <RestCard {...props} />
+                {/* we'll receive the resInfo here */}
+            </div>
+        )
+    }
+}
+
+
+
+
 export default RestCard;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
 import Body from "./components/Body";
@@ -11,14 +11,19 @@ import Menu from "./components/Menu";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 // import Grocery from "./components/Grocery";
 import { lazy, Suspense } from "react";
+import { userContext } from "./utils/UserContext";
 
 
 const FoodApp = () => {
+    const [userName, setUserName] = useState("default user")
+
     return (
     <div id="FoodApp">
+        <userContext.Provider value={{loggedInUser:userName, setUserName}}>
         <Header/>
         <Outlet/>
         <Footer/>
+        </userContext.Provider>
 
     </div>
     )

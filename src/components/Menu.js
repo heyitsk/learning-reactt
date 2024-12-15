@@ -1,8 +1,10 @@
 import useMenuData from "../utils/useMenuData";
 import Shimmer from "./Shimmer";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
+import ResCategory from "./ResCategory";
+import { useState } from "react";
 const Menu = () => {
-    
+    const [showIndex, setShowIndex] = useState(null)
     const {resid} = useParams();
     // console.log(params);//this contains the object which contains the resid 
     
@@ -16,24 +18,26 @@ const Menu = () => {
     const {name, city, avgRating, costForTwoMessage, cuisines} = menuData?.cards[2]?.card?.card?.info;
     const {itemCards} = menuData?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card;
     // console.log(itemCards);
+    // const categories = menuData?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(c=>c.card?.card?.["@type"]==="type.googleapis.com/swig…on.food.v2.ItemCategory")
+    const c = menuData?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(c=>c.card?.card?.["@type"]=="type.googleapis.com/swiggy.presentation.food.v2.ItemCategory")
+    // console.log("category",c);
     
     return(
         <>
-            <h2>Hotel name :- {name}</h2>
-            <h3>city:- {city}</h3>
-            <h3>avgRating:- {avgRating}</h3>
-            <h4>{costForTwoMessage}</h4>
-            <h3>{cuisines.join("-")}</h3>
-            <h4>Recommended</h4>
-            {/* <h5>{itemCards[0].card.info.name}</h5> */}
-            <ul>
-                {/* <h5>{itemCards.map(item => item.card.info.name)}</h5> this prints all side by side */}
-                {itemCards.map(item => 
-                <li key={item.card.info.id}>
-                    {item.card.info.name} -Rs {item.card.info.price||item.card.info.defaultPrice}
-                </li>
-                )}
-            </ul>
+        <div className="text-center p-4 text-[20px]">
+            <h2 className="font-bold text-[25px]">Hotel name :- {name}</h2>
+            <h3>City:- {city}</h3>
+            <h3>Average Rating:- {avgRating}</h3>
+            <h3>{cuisines.join(",")} - {costForTwoMessage}</h3>
+            {
+                c.map((category,index)=><ResCategory 
+                key={index} 
+                data={category.card.card}
+                showList={index===showIndex?true:false}
+                setShowIndex={()=>setShowIndex(index)}
+                />)
+            }
+        </div>
         </>
     )
 }

@@ -133,7 +133,7 @@ const Body = () => {
         </div>
     )
 }
-basically what have we done is resList contained multiple objects and har object ko hamne restaurant bola and each restaurantobject got stored in the resInfo. Props wrapped the resInfo in a object{ resInfo:{}}.
+basically what have we done is resList is an array which contained multiple objects and har object ko hamne restaurant bola and each restaurantobject got stored in the resInfo. Props wrapped the resInfo in a object{ resInfo:{}}.
 So now we'll destructure it hamne props object me se resInfo nikala stored it and fir hamne resInfo.info me se baaki var nikale and stored them 
 
 
@@ -492,3 +492,216 @@ BUT IT STILL DOESN'T LOAD WHEN CLICKED UPON
 
 You said:
 lemme explain it according to my understanding and check if i'm correct or not. when we map the restaurant list and link it to the restaurant.info.id the url is lets suppose restaurant/655882 so the path for a certain menu becomes restaurant/655882 and when this menu component opens it uses the useparams and extracts the resid from the url which is 655882 and then according to logic append in the api 
+
+
+
+
+
+    filteredList is the original, unmodified dataset that remains intact after fetching the data from the API. It serves as the "source of truth" that we use for applying filters, searches, or resets.
+
+    restaurantList is the dynamic dataset that changes depending on user interactions (like filtering or searching). It is the working list that is displayed on the UI.
+
+How It Works
+
+    Initial State:
+        After fetching data from the API:
+
+    setRestaurantList(dataFromAPI);
+    setFilteredList(dataFromAPI);
+
+    At this point:
+        filteredList contains the original, unmodified data.
+        restaurantList contains the same data and is displayed on the UI.
+
+Filtering (e.g., Top Rated):
+
+    When you apply a filter:
+
+    const topRated = filteredList.filter(restaurant => restaurant.info.avgRating > 4);
+    setRestaurantList(topRated);
+
+        The filteredList remains unchanged.
+        The restaurantList is updated with the filtered data, and the UI reflects this change.
+
+Search:
+
+    When the user searches for something:
+
+    const searchResults = filteredList.filter(restaurant =>
+      restaurant.info.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setRestaurantList(searchResults);
+
+        Again, the filteredList remains the same.
+        The restaurantList is updated with the search results and the UI reflects these results.
+
+Reset:
+
+    If the user wants to clear the filters or reset the search:
+
+        setRestaurantList(filteredList);
+
+            The restaurantList is reset to the original data stored in filteredList.
+
+Does the Original restaurantList Remain Intact?
+
+No, the restaurantList is the working state and does not stay intact. It is updated dynamically based on user interactions.
+
+However:
+
+    The filteredList does remain intact as the original dataset.
+    Any changes to restaurantList are derived from filteredList, ensuring the original dataset is always available for resets or new filters.
+
+
+
+
+
+
+
+
+
+
+Higher Order component are functions that take components as argument and return enhanced component 
+older compoennt ->>>> HOCs ->>>> newer components
+
+const withOpenLabel = (RestCard)=>{
+    return()=>{
+        return(
+            <div>
+                <label>Is Open</label>
+                <RestCard/>
+            </div>
+        )
+    }
+}
+in this withOpenLabel is a HOC which takes RestCard as input and return a component which is this
+ ()=>{
+        return(
+            <div>
+                <label>Is Open</label>
+                <RestCard/>
+            </div>
+        )
+    } this is a component which it returns 
+
+
+
+<RestaurntCardOpen resInfo={restaurant}/> 
+or
+<withOpenLabel (restaurant)(resInfo={restaurant})/>
+Both are correct but 1st one is more suitable as it is more readable and if we have to use it mulitple times just have to write RestaurntCardOpen and use it 
+
+
+
+
+
+
+import React, { useState } from 'react'
+import ItemList from './ItemList';
+
+const ResCategory = ({data}) => {
+    console.log(data);
+    const[showList, setShowList] = useState(false)
+    
+    const handleClick= ()=>{
+        setShowList(!showList)
+    }
+  return (
+    <div className='bg-gray-200 w-6/12 mx-auto my-4 shadow-md rounded-md cursor-pointer' onClick={handleClick}>
+        {/* accordian header */}
+        <div className='font-bold p-4 flex justify-between'>
+            <span>{data.title} ({data.itemCards.length})</span>
+            <span>⬇️</span>
+        </div>
+
+        {/* accordian body */}
+        <div>
+            {showList && <ItemList info={data.itemCards}/>}
+        </div>
+    </div>
+    
+  )
+}
+
+export default ResCategory
+------HERE, each resCategory has their own useState. 
+
+
+WHAT  I WANT IS WHEN I CLICK ON ONE OTHERS COLLAPSE.
+--right now it is not possible bcz each item has its own useState and they manage it themselves. Recommended handles its own  use state if it is clicked then the list items expands, at this time the Flat menu does not have an idea about whats going on in the Recommended section bcz it has its own use state.
+--To make this feature i want the "state to be lifted up" means the parent controls the state and not the children themselves. The parent which is the menu controls the state of its children which means that instead of giving the power of expand and collapse to each item i want the parent to have the power. Right now it is an uncontrolled component as the parent has no control over it 
+
+
+
+
+Sometimes, you want the state of two components to always change together. To do it, remove state from both of them, move it to their closest common parent, and then pass it down to them via props. This is known as lifting state up, and it’s one of the most common things you will do writing React code.
+
+
+
+
+
+
+
+
+
+
+
+
+2 ways of using context 
+-- functional compoennt -> useContext
+-- class based component -> <userContext.Consumer>
+                        {(data)=>{
+                            console.log(data);
+                            
+                        }}
+                    </userContext.Consumer> inside the .consumer pass a callback function which has access to the data passed in the create context 
+now if lessay we have  logged in by the authentication process and now we want to add username instead of default user we use 
+        <userContext.Provider value={{loggedInUser:"kushagra"}}> 
+
+
+
+<userContext.Provider value={{loggedInUser:"kushagra"}}>
+        <Header/>
+        <Outlet/>
+        <Footer/>
+        </userContext.Provider> in this provider wraps the entire app so all component will be able to access kushagra 
+
+but if we just wrap header then only header will be able to access kushagra while others access ddefault user 
+
+
+<userContext.Provider value={{loggedInUser:"kushagra"}}>
+        <userContext.Provider value={{loggedInUser:"hello"}}>
+        <Header/>
+        </userContext.Provider>
+        
+        <Outlet/>
+        <Footer/>
+        </userContext.Provider> now the header will have hello and the entire app will have kushagra 
+
+
+
+const [userName, setUserName] = useState("default user")
+
+    return (
+    <div id="FoodApp">
+        <userContext.Provider value={{loggedInUser:userName}}>
+        <Header/>
+        <Outlet/>
+        <Footer/>
+        </userContext.Provider>
+
+    </div>
+    )
+NOW I WANT TO CHANGE THE USERNAME TO WHAT I TYPE IN THE INPUT FIELD.
+how can i change the value of username?
+-by setUserName
+how can i access setUserName from body?
+-by passing it in the value 
+--value={{loggedInUser:userName}, setUserName} like along with the username we are passing a function to edit it which can also be accessed from anywhere 
+now the username is changed even in the aboutus page which comes via lazy loading even there the loggedInUser is the new value 
+
+
+
+
+
+
