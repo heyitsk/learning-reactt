@@ -701,7 +701,74 @@ how can i access setUserName from body?
 now the username is changed even in the aboutus page which comes via lazy loading even there the loggedInUser is the new value 
 
 
+redux is a different library from react and you install it.Redux offers easy debugging
+
+
+import { configureStore } from "@reduxjs/toolkit"; we import it from reduxjs/toolkit bcz it has something to do with redux 
+import { Provider } from "react-redux"; we import it from react-redux bcz it has to bridge the redux and the react 
+
+
+
+addItem: (state,action)=> {
+            state.items.push(action.payload)
+        }
+in this addItem is the action and corresponding to this action (state,action)=> {
+            state.items.push(action.payload)
+        } this is the reducer fucntion which changes the state and update the slice
+
+
+
+under the hood what is happening is that cartSlice is a big object inside it there are actions and reducers 
+{
+    actions:{
+        addItem
+    },
+    reducer
+}
+something like this     
+so we are exporting cartSlice.reducer and each action individually 
+
+
+
+The slice we made now we have to import it in the appStore so inside the configureStore which is an object we'll pass the reducer.
+now this reducer is the biggest reducer which is for changing the entire store. It contains list of all reducers for changint the slices in the store
+const appStore = configureStore({
+    reducer:{
+        cart: cartReducer,
+    }
+});
 
 
 
 
+now we read the value from store using useSelector which is basically that we're subscribing our header to the store 
+ const cart = useSelector((store)=>store.cart.items)
+ useSelector is a hook which  is a normal js function. It takes the store as parameter and asks "which part of store you want to subscribe to" so we want to change or subscribe to store.cart.items 
+
+
+
+ IMPORTANT NOTE 
+ when using selector subscribe to the correct portion of the store 
+  const cartItems = useSelector((store)=> store.cart.items)
+or 
+  const store = useSelector((store)=>store)
+  const cartItems = store.cart.items
+They both are same but the second method is not at all efficient bcz you're subscribing to the entire store so if anything like if there is a change in another slice the whole store gets updated which we don't want we just want to subscribe it to the cart 
+
+
+
+
+
+when to use reducer and when reducers 
+- when we create a store there is a "big reducer" and inside it can have multiple reducers. And inside slice there are "multiple reducers". And note that we are exporting one "reducer" which is a combintion of all small reducers 
+
+
+
+
+in vanilla(older) redux you can't mutate the state and returning was necessary 
+    const newState = [...state]
+    newState.list.push(action.payload)
+    return newState
+
+but now with redux toolkit you can mutate the state and returning is not mandatory. redux toolkit uses immer behind the scene
+BUT BEHIND THE SCENE REDUX IS STILL DOING THE ABOVE LOGIC IT'S JUST THAT WE DON'T HAVE TO DO IT ANY LONGER
