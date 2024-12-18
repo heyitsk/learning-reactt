@@ -4,11 +4,16 @@ import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import { useContext } from "react";
 import { userContext } from "../utils/UserContext";
+import { useSelector } from "react-redux";
 const Header = () => {
     const [buttonState, setbuttonState]= useState("login");
     console.log("header renderd");   
     const {loggedInUser} = useContext(userContext)
     console.log(loggedInUser);
+    
+
+    const cartItems = useSelector((store)=>store.cart.items)
+    console.log(cartItems);
     
 
 
@@ -29,7 +34,9 @@ const Header = () => {
                     <li className="px-3">Interent Status:{onlineStatus?"✔️":"❌"}</li>
                     <li className="px-3"><Link to="/">Home</Link></li>                      {/* if you use anchor tags to reroute you they refresh the entire page so we use LINK to */}
                     <li className="px-3"><Link to="/about">About</Link></li>
-                    <li className="px-3"><Link to="/contact">Contact</Link></li>                    
+                    <li className="px-3"><Link to="/contact">Contact</Link></li>  
+                    <li className="px-3"><Link to="/cart">Cart ({cartItems.length})</Link></li>                    
+
                     <li className="px-3"><Link to="/grocery">{loggedInUser}</Link></li>  
                     <li className="px-3">Grocery</li>
                     {/* <button onClick={()=>{setbuttonState ("logout")}}>{buttonState}</button> */}

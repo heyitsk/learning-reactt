@@ -12,6 +12,9 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 // import Grocery from "./components/Grocery";
 import { lazy, Suspense } from "react";
 import { userContext } from "./utils/UserContext";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
+import Cart from "./components/Cart";
 
 
 const FoodApp = () => {
@@ -19,12 +22,13 @@ const FoodApp = () => {
 
     return (
     <div id="FoodApp">
+        <Provider store={appStore}>
         <userContext.Provider value={{loggedInUser:userName, setUserName}}>
-        <Header/>
-        <Outlet/>
-        <Footer/>
+            <Header/>
+            <Outlet/>
+            <Footer/>
         </userContext.Provider>
-
+        </Provider>
     </div>
     )
 }
@@ -47,13 +51,18 @@ const appRouter = createBrowserRouter([
                 element:<Contact/>
             },
             {
+                path:"/cart",
+                element:<Cart/>
+            },
+            {
                 path:"/grocery",
                 element:<Suspense fallback={<h1>hello</h1>}><Grocery/></Suspense>
             },
             {
                 path:"/restaurants/:resid", //the semicolon means that the resid is dynamic and can be used for dynamic routing. You will read this resid using another hook provided by router dom called useParams
                 element:<Menu/>
-            }
+            },
+            
         ],
         errorElement:<Error/> // this will render if the path is not correct 
     },
